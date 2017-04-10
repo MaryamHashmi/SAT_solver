@@ -1,7 +1,7 @@
 # convert_CNF
+import SAT_solver
 
-
-def bicon(phi):
+def bicon(phi):  #resolving biconditional to implication
     if type(phi) is str:
         return phi
     elif type(phi) is list and phi[0] == "bicon":
@@ -14,7 +14,7 @@ def bicon(phi):
         return [phi[0]]+[bicon(x) for x in phi[1:]]
 
 
-def imp(phi):
+def imp(phi):  #resolving implication to or
     if type(phi) is str:
         return phi
     elif type(phi) is list and phi[0] == "imp":
@@ -29,7 +29,7 @@ def imp(phi):
         return [phi[0]]+[imp(x) for x in phi[1:]]
 
 
-def neg(phi):
+def neg(phi): #resolving double negation using DeMorgan's law
     if type(phi) is str:
         return phi
     elif type(phi) is list and phi[0] == "not"  and  type(phi[1]) is list and phi[1][0] == "and":
@@ -39,7 +39,7 @@ def neg(phi):
     else:
         return [phi[0]]+[neg(x) for x in phi[1:]]
 
-def double_neg(phi):
+def double_neg(phi):  #removing double negation
     if type(phi) is str:
         return phi
     elif type(phi) is list and phi[0] == "not"  and  type(phi[1]) is list and phi[1][0] == "not":
@@ -48,7 +48,7 @@ def double_neg(phi):
         return [phi[0]]+[double_neg(x) for x in phi[1:]]
 
 
-def distributivity(phi):
+def distributivity(phi):  #resolving or over and
     if type(phi) is str:
         return phi
     elif type(phi) is list and phi[0] == "or"  and  type(phi[1]) is list and phi[1][0] == "and":
@@ -58,7 +58,7 @@ def distributivity(phi):
     else:
         return ([phi[0]] + [distributivity(i) for i in phi[1:]])
 
-def orAssociativity(phi):
+def orAssociativity(phi): #resolving or association
     if type(phi) is str:
         return phi
     elif type(phi) is list and phi[0] == "or":
@@ -74,7 +74,7 @@ def orAssociativity(phi):
         return([phi[0]] + [orAssociativity(i) for i in phi[1:]])
 
 
-def andAssociativity(phi):
+def andAssociativity(phi):  #resolving and asscoiation
     if type(phi) is str:
         return phi
     elif type(phi) is list and phi[0] == "and":
@@ -97,30 +97,43 @@ def cnf(phi):
     phi=distributivity(phi)
     phi=orAssociativity(phi)
     phi=andAssociativity(phi)
-    print phi
+    print "Conjunctive normal form: ", phi
+    return phi
 
 
-
-phi=["not",["not","b"]]
-cnf(phi)
-
-phi=["bicon","a","b"]
-cnf(phi)
-
-phi=["not", ["or", "P", "Q"]]
-cnf(phi)
-
-phi=["not", ["and", ["or","p","q"], "R"]]
-cnf(phi)
-print 5
-phi=["or", ["and", "P", "Q"],"R"]
-cnf(phi)
-
-phi=["or", ["and", "P", "Q"], ["and", "P", "Q"]]
-cnf(phi)
-
-phi=["or",["or", "P", "Q"],"R" ]
-cnf(phi)
-
-phi=["and",["and", "P", "Q"],"R" ]
-cnf(phi)
+#
+# # phi=["not",["not","b"]]
+# # cnf(phi)
+# #
+# # phi=["bicon","a","b"]
+# # phi=cnf(phi)
+# # print " "
+# # print solver.dpll(phi)
+# #
+# # phi=["not", ["or", "P", "Q"]]
+# # cnf(phi)
+# #
+# # phi=["not", ["and", ["or","p","q"], "R"]]
+# # cnf(phi)
+# # print 5
+# # phi=["or", ["and",["not", "P"], "Q"],"R"]
+# # phi=cnf(phi)
+#
+# # phi=["or",["or", "P", "Q"],"R" ]
+# # cnf(phi)
+# #
+# phi=["imp","P","R"]
+# print "phi: ",phi
+# phi=cnf(phi)
+#
+# print SAT_solver.output(SAT_solver.dpll(phi))
+# print " "
+# phi=["or","A",["not","A"]]
+# phi=cnf(phi)
+# print " "
+# print SAT_solver.output(SAT_solver.dpll(phi))
+#
+# phi=["and","1",["not","1"]]
+# phi=cnf(phi)
+# print " "
+# print SAT_solver.output(SAT_solver.dpll(phi))

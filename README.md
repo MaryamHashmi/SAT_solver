@@ -1,2 +1,6 @@
-## SAT_solver
-a simple SAT solver in Python
+# SAT_solver
+
+
+
+
+A simple SAT solver in Python
